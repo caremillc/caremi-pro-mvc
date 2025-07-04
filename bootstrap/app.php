@@ -19,6 +19,7 @@ foreach ($config['providers'] as $providerClass) {
     (new $providerClass())->register();
 }
 
+load_env();
 
 // auto generate env key
 $appKey = env('APP_KEY');
