@@ -53,6 +53,7 @@ $app = new Kernel();
 $response = $app->handle($request);
 
 $response->send();
+
 $app->terminate($request, $response);
 
-dd($response);
+// dd($response);
