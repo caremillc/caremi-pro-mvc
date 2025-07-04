@@ -9,17 +9,16 @@ if (!defined('BASE_PATH')) {
 
 require BASE_PATH . '/vendor/autoload.php';
 
-// Load environment variables and validate required ones
-$dotenv = Dotenv::createImmutable(BASE_PATH);
-$dotenv->safeLoad();
+// Load all configured service providers (including Environment)
+$config = [
+    'providers' => require BASE_PATH . '/config/providers.php',
+];
 
-// Optional: validate required .env variables
-$requiredKeys = ['APP_NAME', 'APP_ENV', 'APP_KEY'];
-foreach ($requiredKeys as $key) {
-    if (!isset($_ENV[$key]) || trim($_ENV[$key]) === '') {
-        throw new RuntimeException("Missing required environment key: $key");
-    }
+// Register each provider
+foreach ($config['providers'] as $providerClass) {
+    (new $providerClass())->register();
 }
+
 
 // auto generate env key
 $appKey = env('APP_KEY');
