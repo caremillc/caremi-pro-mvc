@@ -32,7 +32,7 @@ class UserController extends Controller
         // $path now contains the full path to the stored file
     }
 
-        $name = Request::files('name');
+        $name = FileRequest::file('name');
         $file = FileRequest::file('avatar');
 
         if (FileRequest::hasFile('avatar')) {
