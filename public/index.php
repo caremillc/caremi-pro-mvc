@@ -46,7 +46,8 @@ foreach ($bootstrapFiles as $file) {
 // $content = '<h1>Hello World from index page</h1>';
 // $response = new Response(content: $content, status: 200, headers: []);
 // $response->send();
-throw new \Careminate\Logs\Log("Route '' not found", 404);
+
+// throw new \Careminate\Logs\Log("Route '' not found", 404);
 
 $request = Request::createFromGlobals();
     
