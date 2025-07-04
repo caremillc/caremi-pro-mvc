@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
-        return response('Welcome!', Response::HTTP_OK);
+        return response('Welcome Home!', Response::HTTP_OK);
         return response()->json(['user' => $user]);
         return response()->xml(['status' => 'ok']);
         return redirect('/dashboard');
@@ -42,5 +42,11 @@ class HomeController extends Controller
         }
 
     }
+
+    public function reports():Response
+    {
+           return response('Welcome Reports!', Response::HTTP_OK);
+    }
+   
     
 }
