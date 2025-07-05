@@ -23,7 +23,9 @@ foreach ($bootstrapFiles as $file) {
 }
 
 // Request handling
-// $request = Request::createFromGlobals();
+$request = Request::createFromGlobals();
+
+// dd($request);
 
 // Test env access
 // $name = env('APP_NAME');
@@ -49,13 +51,13 @@ foreach ($bootstrapFiles as $file) {
 
 // throw new \Careminate\Logs\Log("Route '' not found", 404);
 
-$request = Request::createFromGlobals();
-    
 $app = new Kernel();
+
 $response = $app->handle($request);
+
+// dd($response);
 
 $response->send();
 
 $app->terminate($request, $response);
 
-// dd($response);

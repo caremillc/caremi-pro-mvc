@@ -2,7 +2,7 @@
 
 return [
     'default' => env('LOG_CHANNEL', 'single'),
-    'display_errors' => env('APP_DEBUG', false),
+    'display_errors' => env('APP_DEBUG', true),
     'channels' => [
         'single' => [
             'driver' => 'single',
