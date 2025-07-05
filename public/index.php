@@ -25,39 +25,14 @@ foreach ($bootstrapFiles as $file) {
 // Request handling
 $request = Request::createFromGlobals();
 
-// dd($request);
-
-// Test env access
-// $name = env('APP_NAME');
-// $key  = env('APP_KEY');
-
-// Output or use in response
-// $response = Response::json([
-//     'name'           => env('APP_NAME'),
-//     'key'            => env('APP_KEY'),
-//     'headers_sent'   => headers_sent(),
-//     'output_buffering' => ob_get_level(),
-//     'debug_mode'     => env('APP_DEBUG'),
-//     'time'           => round(microtime(true) - APP_START, 4),
-// ]);
-
-// $response->send();
-
-
-// send response (string of content)
-// $content = '<h1>Hello World from index page</h1>';
-// $response = new Response(content: $content, status: 200, headers: []);
-// $response->send();
-
-// throw new \Careminate\Logs\Log("Route '' not found", 404);
+$container = require BASE_PATH . '/config/container.php';
 
 $app = new Kernel();
 
 $response = $app->handle($request);
 
-// dd($response);
-
 $response->send();
 
 $app->terminate($request, $response);
 
+// dd($response);
