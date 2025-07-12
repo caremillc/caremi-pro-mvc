@@ -1,13 +1,14 @@
-<?php 
+<?php declare(strict_types=1);
 namespace App\Http;
 
 class HttpKernel
 {
-    public static $globalWeb = [];
+    
+    public static array $globalWeb = [];
 
-    public static $middlewareWebRoute = [];
+    public static array $middlewareWebRoute = [];
 
-    public static $middlewareApiRoute = [];
+    public static array $middlewareApiRoute = [];
 
-    public static $globalApi = [];
+    public static array $globalApi = [];
 }
