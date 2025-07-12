@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 
+use Careminate\Http\Kernel;
+use Careminate\Http\Requests\Request;
 use Careminate\Http\Responses\Response;
 
 // Define application constants
@@ -21,6 +23,13 @@ foreach ($bootstrapFiles as $file) {
 }
 
 // send response (string of content)
-$content = '<h1>Hello World from index page</h1>';
-$response = new Response(content: $content, status: 200, headers: []);
+$request = Request::createFromGlobals();
+    
+$app = new Kernel();
+$response = $app->handle($request);
+
 $response->send();
+$app->terminate($request, $response);
+
+// dd($request);
+// dd($response);
