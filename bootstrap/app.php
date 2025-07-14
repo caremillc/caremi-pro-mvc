@@ -23,4 +23,4 @@ load_env();
 
 EnvManager::validateAppKey(env('APP_KEY'));
 
-throw new \Careminate\Logs\Log("Route '{$uri}' not found", 404);
+// throw new \Careminate\Logs\Log("Route '{$uri}' not found", 404);

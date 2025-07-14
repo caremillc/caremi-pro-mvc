@@ -3,5 +3,6 @@
 use Careminate\Routing\Route;
 
 Route::add('GET', '/api', function () {
-    return 'api anonymous route is working!';
+    $user= ['name'=>'eric'];
+   return response()->json(['user' => $user]);
 });
