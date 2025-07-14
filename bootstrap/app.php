@@ -19,5 +19,8 @@ foreach ($config['providers'] as $providerClass) {
     (new $providerClass())->register();
 }
 
+load_env();
+
 EnvManager::validateAppKey(env('APP_KEY'));
 
+throw new \Careminate\Logs\Log("Route '{$uri}' not found", 404);
