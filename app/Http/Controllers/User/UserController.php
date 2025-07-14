@@ -1,72 +1,56 @@
-<?php declare (strict_types = 1);
+<?php declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
-use App\Models\User;
-use Careminate\Support\Str;
 use App\Http\Controllers\Controller;
-use Careminate\Http\Requests\Request;
-use Careminate\Filesystem\FileRequest;
+use Careminate\Http\Responses\Response;
 
-
-class UserController extends Controller 
+class UserController extends Controller
 {
-    public function index()
+    public function index(): Response
+    { 
+        $users = "All users";
+
+       return redirect('users/index.html.twig', compact('users'));
+    }
+
+    public function create(): Response
     {
-        Str::camel('user_name');        // "userName"
-        Str::studly('user_name');       // "UserName"
-        Str::snake('UserName');         // "user_name"
-        Str::uuid();                    // Random UUID
-        Str::slug('Hello World!');      // "hello-world"
-        Str::limit('This is a long sentence', 10); // "This is a..."
-
-        
+        // Your logic here
+        return redirect('users/create.html.twig');
     }
 
-    public function store(Request $request)
+    public function store(): Response
     {
-        $file = FileRequest::file('avatar');
-
-    if ($file && $file->isValid()) {
-        $path = $file->store(storage_path('uploads/avatars'));
-
-        // $path now contains the full path to the stored file
+        // Your logic here
+        var_dump($this->request->all());
+       
+        return new Response("<h1>User store successfully</h1>");
     }
 
-        $name = FileRequest::file('name');
-        $file = FileRequest::file('avatar');
-
-        if (FileRequest::hasFile('avatar')) {
-            FileRequest::move('avatar', storage_path('uploads/avatars'));
-        }
-
-
-        if ($file && $file->isValid() && $file->isImage()) {
-        $file->store('uploads/avatars');
-        }
-
-        if (!$file->isMime(['image/jpeg', 'image/png'])) {
-            // return an error: "Only JPEG and PNG allowed"
-        }
-
-
-        if ($file->isImage() && $file->hasExtension(['jpg', 'png'])) {
-            $file->store('uploads/images');
-        }
-
-
-
-        $file = FileRequest::file('resume');
-
-        if ($file && $file->isValid()) {
-            $path = $file->storeAs('uploads/resumes', 'john-doe.pdf');
-            // returns 'uploads/resumes/john-doe.pdf' or false
-        }
-
+    public function show(int $id): Response
+    {
+        // Your logic here
+        $postId = "<h1>Show Post with ID: $id</h1>";
+        return redirect('users/show.html.twig', compact('postId'));
     }
 
-    // public function show(User $user)
-    // {
-    //     // $user is already a resolved model
-    //     return view('users.profile', compact('user'));
-    // }
+    public function edit(int $id): Response
+    {
+        // Your logic here
+        $postId = "<h1>Edit Post with ID: $id</h1>";
+        return redirect('users/edit.html.twig', compact('postId'));
+    }
+
+    public function update(int $id): Response
+    {
+        // Your logic here
+        return new Response("<h1>Update Post with ID: $id</h1>");
+    }
+
+    public function delete(int $id): Response
+    {
+        // Your logic here
+        return new Response("<h1>Delete Post with ID: $id</h1>");
+    }
 }
+ 
