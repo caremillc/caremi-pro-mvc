@@ -22,14 +22,19 @@ foreach ($bootstrapFiles as $file) {
     require_once $file;
 }
 
-// send response (string of content)
+// Request handling
 $request = Request::createFromGlobals();
-    
-$app = new Kernel();
-$response = $app->handle($request);
+
+// passing the kernel to the Container
+$container = require BASE_PATH . '/config/container.php';
+
+// Initializes the application's kernel 
+$kernel =  $container->get(Kernel::class); 
+
+$response = $kernel->handle($request);
 
 $response->send();
-$app->terminate($request, $response);
 
-// dd($request);
 // dd($response);
+
+$kernel->terminate($request, $response);
