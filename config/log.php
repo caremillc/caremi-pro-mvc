@@ -1,12 +1,20 @@
 <?php declare(strict_types=1);
 
 return [
-    'default' => env('LOG_CHANNEL', 'single'),
+    'default' => env('LOG_CHANNEL', 'daily'),
+
     'display_errors' => env('APP_DEBUG', false),
+
     'channels' => [
         'single' => [
-            'driver' => 'single',
-            'path' => storage_path(env('LOG_PATH', 'logs/log.log')),
+            'driver' => 'file',
+            'path'   => storage_path('logs/log.log'),
+        ],
+
+        'daily' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/log.log'),
+            'date_format' => 'Y-m-d', // Optional
         ],
     ],
 ];
