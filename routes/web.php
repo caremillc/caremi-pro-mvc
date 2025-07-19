@@ -22,6 +22,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 Route::middleware([App\Http\Middlewares\AuthMiddleware::class])->group(function () {
     Route::get('/dashboard', DashboardController::class, 'index');
+    Route::get('dashboard/{id}/show', DashboardController::class, 'show');
 });
 
 
