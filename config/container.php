@@ -7,8 +7,20 @@ use Careminate\Logs\Contracts\LoggerInterface;
 
 $container = new Container();
 
+# parameters for application config
+$routes  = glob(BASE_PATH . '/routes/*.php');
+// sort($routes);
+foreach ($routes as $route) {
+    // echo $route;
+    require_once $route;
+}
+
 // Bind RouterInterface to Router implementation
 $container->bind(\Careminate\Routing\Contracts\RouterInterface::class, \Careminate\Routing\Router::class);
+
+// Bind routes to container
+$container->extend(\Careminate\Routing\Contracts\RouterInterface::class)
+    ->addMethodCall('setRoutes',[$routes]);
 
 // Register the HTTP Kernel with its dependencies
 $container->bind(\Careminate\Http\Kernel::class)
@@ -29,6 +41,6 @@ $container->registerProviders([
 
 
 
-// dd($container);
+dd($container);
 return $container;
 
