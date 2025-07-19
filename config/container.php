@@ -7,6 +7,19 @@ use Careminate\Logs\Contracts\LoggerInterface;
 
 $container = new Container();
 
+// Load environment variables
+$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+$dotenv->load(dirname(__DIR__) . '/.env');
+
+#env parameters
+$appEnv = env('APP_ENV', 'production'); // Default to 'production' if not set
+$appKey = env('APP_KEY'); // Default to 'production' if not set
+$appVersion = env('APP_VERSION');
+
+$container->add('APP_ENV', $appEnv);
+$container->add('APP_KEY', $appKey);
+$container->add('APP_VERSION', $appVersion);
+
 # parameters for application config
 $routes  = glob(BASE_PATH . '/routes/*.php');
 // sort($routes);
@@ -50,6 +63,6 @@ $container->registerProviders([
 
 
 
-// dd($container);
+dd($container);
 return $container;
 
