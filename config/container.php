@@ -25,6 +25,15 @@ $container->extend(\Careminate\Routing\Contracts\RouterInterface::class)
 // Register the HTTP Kernel with its dependencies
 $container->bind(\Careminate\Http\Kernel::class)
           ->addArgument(\Careminate\Routing\Contracts\RouterInterface::class);
+
+$container->instance(\Careminate\Container\Contracts\ContainerInterface::class, $container);
+
+$container->bind(\Careminate\Http\Kernel::class)
+          ->addArguments([
+              \Careminate\Routing\Contracts\RouterInterface::class,
+              \Careminate\Container\Contracts\ContainerInterface::class,
+          ]);
+
 //daily log
 $container->bind(LoggerInterface::class, function () {
     $driver = config('log.channels.' . config('log.default') . '.driver', 'file');
@@ -41,6 +50,6 @@ $container->registerProviders([
 
 
 
-dd($container);
+// dd($container);
 return $container;
 
