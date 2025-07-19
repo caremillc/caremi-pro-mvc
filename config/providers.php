@@ -2,6 +2,7 @@
 
 return [
     Careminate\Providers\EnvironmentServiceProvider::class,
+    App\Providers\AppServiceProvider::class,
 
     // Add more providers here
     // App\Providers\RouteServiceProvider::class,

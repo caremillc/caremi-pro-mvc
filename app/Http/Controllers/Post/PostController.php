@@ -32,6 +32,8 @@ class PostController extends Controller
 
     public function edit(int $id): Response
     {
+        echo $id;
+        exit();
        return redirect('posts/edit.html.twig');  
     }
 
