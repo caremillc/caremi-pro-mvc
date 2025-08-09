@@ -1,0 +1,7 @@
+<?php declare(strict_types=1);
+
+$providers = [
+    
+];
+
+echo 'app - '.PHP_EOL;
