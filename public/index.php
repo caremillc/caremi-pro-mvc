@@ -6,8 +6,6 @@ define('BASE_PATH', dirname(__DIR__));    // Base directory path
 define('ROOT_PATH', dirname(__FILE__));   // Root directory path
 define('ROOT_DIR', dirname(__FILE__));
 
-// ✅ Load Composer Autoload FIRST
-require_once BASE_PATH . '/vendor/autoload.php';
 
 // bootstrapping
 // require BASE_PATH . '/bootstrap/app.php';
