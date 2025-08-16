@@ -1,7 +1,3 @@
 <?php declare(strict_types=1);
 
-$providers = [
-    
-];
-
-echo 'bootstrap app - '.PHP_EOL;
+echo 'bootstrap app - this from bootstrap app'.PHP_EOL."</br>";
