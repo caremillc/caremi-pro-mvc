@@ -44,6 +44,7 @@ try {
     // send response (string of content)
     $response = $kernel->handle($request);
 
+    // return response()->view('home');
     $response->send();
 
 } catch (Throwable $e) {
@@ -52,7 +53,7 @@ try {
 
     // Show error response
     if ($_ENV['APP_DEBUG'] ?? false) {
-        $response = Response::json([
+        $response = response()->json([
             'error' => $e->getMessage(),
             'trace' => $e->getTrace(),
         ], 500);
