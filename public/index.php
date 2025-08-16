@@ -1,5 +1,7 @@
 <?php declare (strict_types = 1); // public/index.php
 
+use Careminate\Http\Kernel;
+use Careminate\Http\Requests\Request;
 use Careminate\Http\Responses\Response;
 
 // Define application constants
@@ -33,18 +35,15 @@ try {
         return json_encode($data, JSON_PRETTY_PRINT | Response::getJsonOptions());
     });
 
-    // response handling would go here
-    // $response = Response::json([
-    //     'app'    => config('app.name'),
-    //     'debug'  => config('app.debug'),
-    //     'env'    => config('app.env'),
-    //     'time'   => round(microtime(true) - APP_START, 4),
-    //     'status' => 'OK',
-    // ]);
+    // request received
+    $request = Request::createFromGlobals();
+
+    // perform some logic
+    $kernel = new Kernel();
 
     // send response (string of content)
-    $content  = '<h1>Hello World from index page</h1>';
-    $response = new Response(content: $content, status: 200, headers: []);
+    $response = $kernel->handle($request);
+
     $response->send();
 
 } catch (Throwable $e) {
@@ -64,5 +63,3 @@ try {
     $response->send();
     exit(1);
 }
-
-

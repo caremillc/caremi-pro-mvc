@@ -11,7 +11,7 @@ use Careminate\Support\EnvLoader;
 */
 
 // Minimum PHP version
-if (version_compare(PHP_VERSION, '8.3.0', '<')) {
+if (version_compare(PHP_VERSION, '8.2.0', '<')) {
     header('Content-Type: text/plain');
     exit("PHP 8.2 or higher is required. Current version: " . PHP_VERSION);
 }
@@ -19,4 +19,4 @@ if (version_compare(PHP_VERSION, '8.3.0', '<')) {
 // Load .env into $_ENV / $_SERVER
 EnvLoader::load(BASE_PATH);
 
-echo 'Bootstrap app loaded.' . PHP_EOL;
+echo 'Bootstrap app loaded.' . PHP_EOL."</br>";
