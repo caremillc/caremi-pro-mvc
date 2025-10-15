@@ -1,87 +1,78 @@
 <?php declare(strict_types=1);
 
-use Careminate\Support\Arr;
-use Careminate\Support\Str;
-use Careminate\Support\Collection;
-use Careminate\Support\Config;
+use Careminate\Http\Requests\Request;
 
 // ---------------------------------------------------------
 // Bootstrap the framework
 // ---------------------------------------------------------
 require __DIR__ . '/../bootstrap/app.php';
 
-echo "==============================\n";
-echo "Careminate Framework Test\n";
-echo "==============================\n\n";
+// Create Request from globals
+$request = Request::createFromGlobals();
 
-// ------------------------------
-// 1. Testing Arr Utility
-// ------------------------------
-$array = [
-    'user' => [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'roles' => ['admin', 'editor'],
-    ],
-];
-
+// ============================
+// Display Request Info
+// ============================
 echo"<pre>";
+echo "<h2>Request Info</h2>";
+echo "<strong>Method:</strong> " . $request->getMethod() . "<br>";
+echo "<strong>Path:</strong> " . $request->getPathInfo() . "<br>";
+echo "<strong>Full URL:</strong> " . $request->fullUrl() . "<br>";
+echo "<strong>Is Secure:</strong> " . ($request->isSecure() ? 'Yes' : 'No') . "<br>";
+echo "<strong>Client IP:</strong> " . $request->ip() . "<br>";
+echo "<strong>User Agent:</strong> " . $request->userAgent() . "<br>";
 
-echo "Arr::get: " . Arr::get($array, 'user.name') . "\n"; // John Doe
-Arr::set($array, 'user.age', 30);
-echo "Arr::get after set: " . Arr::get($array, 'user.age') . "\n"; // 30
-Arr::forget($array, 'user.email');
-echo "Arr::has email: " . (Arr::has($array, 'user.email') ? 'Yes' : 'No') . "\n"; // No
+die();
+// ============================
+// Test GET/POST Parameters
+// ============================
+echo "<h2>Input Data</h2>";
+echo "<strong>GET param 'id':</strong> " . $request->query('id', 'N/A') . "<br>";
+echo "<strong>POST param 'name':</strong> " . $request->post('name', 'N/A') . "<br>";
+echo "<strong>Any input 'data':</strong> " . $request->input('data', 'N/A') . "<br>";
 
-// ------------------------------
-// 2. Testing Str Utility
-// ------------------------------
-echo "\nStr::camel: " . Str::camel('hello_world') . "\n"; // helloWorld
-echo "Str::snake: " . Str::snake('HelloWorld') . "\n"; // hello_world
-echo "Str::kebab: " . Str::kebab('HelloWorld') . "\n"; // hello-world
-echo "Str::slugify: " . Str::slugify('This is a test!') . "\n"; // this-is-a-test
-echo "Str::random: " . Str::random(8) . "\n";
+// ============================
+// Test JSON Input
+// ============================
+if ($request->isJson()) {
+    echo "<h2>JSON Input</h2>";
+    $jsonData = $request->json();
+    echo "<pre>" . json_encode($jsonData, JSON_PRETTY_PRINT) . "</pre>";
+}
 
-// ------------------------------
-// 3. Testing Collection
-// ------------------------------
-$collection = new Collection([
-    ['name' => 'Alice', 'age' => 25],
-    ['name' => 'Bob', 'age' => 30],
-    ['name' => 'Charlie', 'age' => 25],
-]);
+// ============================
+// Test Headers
+// ============================
+echo "<h2>Headers</h2>";
+foreach ($request->getHeaders() as $name => $value) {
+    echo "<strong>{$name}:</strong> {$value}<br>";
+}
 
-echo "\nCollection::pluck names:\n";
-print_r($collection->pluck('name')->toJson());
+// ============================
+// Test Only & Except
+// ============================
+echo "<h2>Filtered Input</h2>";
+$only = $request->only(['id', 'name']);
+$except = $request->except(['password']);
+echo "<strong>Only 'id' & 'name':</strong> <pre>" . print_r($only, true) . "</pre>";
+echo "<strong>Except 'password':</strong> <pre>" . print_r($except, true) . "</pre>";
 
-echo "Collection::groupBy age:\n";
-print_r($collection->groupBy('age')->toJson());
+// ============================
+// Test Files
+// ============================
+echo "<h2>Files</h2>";
+foreach ($request->allFiles() as $key => $file) {
+    echo "<strong>{$key}:</strong> ";
+    echo $request->hasFile($key) ? "Uploaded ({$file['tmp_name']})" : "Not uploaded";
+    echo "<br>";
+}
 
-echo "Collection::sum age: " . $collection->sum('age') . "\n";
-echo "Collection::avg age: " . $collection->avg('age') . "\n";
-
-// ------------------------------
-// 4. Testing Config
-// ------------------------------
-// Ensure config/app.php exists with 'name' => 'Careminate'
-Config::set('app.debug', true);
-echo "\nConfig::get app.name: " . Config::get('app.name', 'DefaultApp') . "\n";
-echo "Config::get app.debug: " . (Config::get('app.debug') ? 'true' : 'false') . "\n";
-echo "Config::has app.env: " . (Config::has('app.env') ? 'Yes' : 'No') . "\n";
-
-// ------------------------------
-// 5. Testing Macroable
-// ------------------------------
-Collection::macro('doubleAges', function () {
-    return $this->map(fn($item) => ['name' => $item['name'], 'age' => $item['age'] * 2]);
-});
-
-$doubled = $collection->doubleAges();
-echo "\nCollection::doubleAges:\n";
-print_r($doubled->toJson());
-
-echo "\n==============================\n";
-echo "Tests Completed!\n";
-echo "==============================\n";
-
-?>
+// ============================
+// Test Spoofed Methods (PUT/PATCH/DELETE via POST)
+// ============================
+echo "<h2>Method Checks</h2>";
+echo "isPost(): " . ($request->isPost() ? 'Yes' : 'No') . "<br>";
+echo "isGet(): " . ($request->isGet() ? 'Yes' : 'No') . "<br>";
+echo "isPut(): " . ($request->isPut() ? 'Yes' : 'No') . "<br>";
+echo "isPatch(): " . ($request->isPatch() ? 'Yes' : 'No') . "<br>";
+echo "isDelete(): " . ($request->isDelete() ? 'Yes' : 'No') . "<br>";
