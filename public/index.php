@@ -67,6 +67,7 @@ try {
     // dd($request);   // Dump Request object details
     // dd($response);  // Dump Response object details
 
+    
 } catch (AuthException $e) {
     // ---------------------------------------------------------
     // Handle authentication/authorization errors (401)
@@ -87,4 +88,14 @@ try {
     // Production mode: render friendly error page
     $handler = new Handler();
     $handler->render($request ?? null, $e)->send();
+}
+
+// Example: App info (you can comment this out later)
+echo '<br><small>Environment: ' . config('app.env') . ' | Debug: ' . (config('app.debug') ? 'ON' : 'OFF') . '</small>';
+
+try {
+    $pdo = app('db');
+    echo '<br><small>Database connected successfully!</small>';
+} catch (Exception $e) {
+    echo '<br><small>Database connection failed: ' . $e->getMessage() . '</small>';
 }

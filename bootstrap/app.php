@@ -1,11 +1,14 @@
 <?php declare(strict_types=1);
 
+use Careminate\Container\ServiceContainer;
+
 // ---------------------------------------------------------
 // Define application constants
 // ---------------------------------------------------------
 define('CAREMI_START', microtime(true));      // Application start time
 define('BASE_PATH', dirname(__DIR__));        // Project base directory
 define('BOOTSTRAP_PATH', __DIR__);            // Bootstrap directory
+define('CONFIG_PATH', BASE_PATH . '/config'); // Config directory
 define('PUBLIC_PATH', BASE_PATH . '/public'); // Public directory
 
 // ---------------------------------------------------------
@@ -23,10 +26,6 @@ if (file_exists($autoloadPath)) {
 // ---------------------------------------------------------
 require_once BOOTSTRAP_PATH . '/performance.php';
 
-// ---------------------------------------------------------
-// Register automatic shutdown handler for performance logging
-// ---------------------------------------------------------
-register_shutdown_function('logExecutionTime');
 
 // ---------------------------------------------------------
 // Simple .env loader
@@ -48,3 +47,52 @@ if (file_exists($envFile)) {
         $_SERVER[$key] = $value;
     }
 }
+
+
+// ---------------------------------------------------------
+// Set error handling
+// ---------------------------------------------------------
+if (!function_exists('app_debug_mode')) {
+    function app_debug_mode(): bool
+    {
+        return filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOL);
+    }
+}
+
+if (app_debug_mode()) {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+}
+
+// ---------------------------------------------------------
+// Initialize the Service Container
+// ---------------------------------------------------------
+$app = new ServiceContainer();
+
+// ---------------------------------------------------------
+// Register Service Providers
+// ---------------------------------------------------------
+$providers = require CONFIG_PATH . '/providers.php';
+
+foreach ($providers as $providerClass) {
+    if (class_exists($providerClass)) {
+        /** @var ServiceProvider $provider */
+        $provider = new $providerClass($app);
+        $provider->register();
+        $provider->boot();
+    }
+}
+
+// ---------------------------------------------------------
+// Make the container globally available
+// ---------------------------------------------------------
+$GLOBALS['app'] = $app;
+
+// dd($app);
+// ---------------------------------------------------------
+// Register global shutdown handler
+// ---------------------------------------------------------
+register_shutdown_function('logExecutionTime');
