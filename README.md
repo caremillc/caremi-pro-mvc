@@ -11,4 +11,24 @@ You can learn how this framework was create step by step from [here](https://car
 
 - [Installation](#install)
 
+## Utilities
+
+**Namespace:** `Careminate\Support`
+**PHP Version:** 8.1+ recommended
+
+---
+
+## Table of Contents
+
+* Goto [Utilities Classes]
+
+* [Arr](./arr.md)
+* [Str](./str.md)
+* [Macroable](./macroable.md)
+* [Config](./config.md)
+* [Collection](./collection.md)
+
+
+* Goto [Structure]
+* [Kernel](./kernel.md)
 ---
