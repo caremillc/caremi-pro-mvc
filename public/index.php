@@ -46,8 +46,8 @@ try {
     // Pass the request to the Kernel for handling
     // ---------------------------------------------------------
     //parse the $router into the constructor of the kernel class
-    //$kernel = new Kernel($router);
-	$kernel =  $container->get(Kernel::class);  
+    // $kernel = new Kernel($router);
+    $kernel =  $container->get(Kernel::class); 
 
     /*
         The Kernel processes the request:
@@ -96,3 +96,5 @@ try {
     $handler = new Handler();
     $handler->render($request ?? null, $e)->send();
 }
+
+
