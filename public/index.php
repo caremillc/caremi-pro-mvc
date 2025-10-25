@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
 use Careminate\Http\Kernel;
+use Careminate\Routing\Router;
 use Careminate\Exceptions\Handler;
-use Careminate\Exceptions\AuthException;
 use Careminate\Http\Requests\Request;
+use Careminate\Exceptions\AuthException;
 
 // ---------------------------------------------------------
 // Bootstrap the framework
@@ -36,10 +37,14 @@ try {
             $request->all() -> Combined GET, POST, and input params
     */
 
+    //instantiate router
+    $router = new Router();
+
     // ---------------------------------------------------------
     // Pass the request to the Kernel for handling
     // ---------------------------------------------------------
-    $kernel = new Kernel();
+    //parse the $router into the constructor of the kernel class
+    $kernel = new Kernel($router);
 
     /*
         The Kernel processes the request:
@@ -88,5 +93,3 @@ try {
     $handler = new Handler();
     $handler->render($request ?? null, $e)->send();
 }
-
-
