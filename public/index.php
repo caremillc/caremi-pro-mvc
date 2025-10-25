@@ -10,7 +10,9 @@ use Careminate\Exceptions\AuthException;
 // Bootstrap the framework
 // ---------------------------------------------------------
 require __DIR__ . '/../bootstrap/app.php';
+$container = require BASE_PATH . '/config/container.php';
 
+// dd($container);
 try {
     // ---------------------------------------------------------
     // Capture the current HTTP request
@@ -44,7 +46,8 @@ try {
     // Pass the request to the Kernel for handling
     // ---------------------------------------------------------
     //parse the $router into the constructor of the kernel class
-    $kernel = new Kernel($router);
+    //$kernel = new Kernel($router);
+	$kernel =  $container->get(Kernel::class);  
 
     /*
         The Kernel processes the request:
