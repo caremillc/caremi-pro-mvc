@@ -1,17 +1,25 @@
-<?php declare(strict_types=1);
+<?php declare (strict_types = 1);
 namespace App\Http\Controllers\Post;
 
+use App\Entity\Post;
+use App\Repository\PostMapper;
+use App\Repository\PostRepository;
 use App\Http\Controllers\Controller;
 use Careminate\Http\Responses\Response;
-
+use Careminate\Http\Responses\RedirectResponse;
 
 class PostController extends Controller
 {
+    public function __construct(
+        private PostMapper $postMapper,
+        private PostRepository $postRepository
+    ) {}
+
     public function index(): Response
-    { 
+    {
         $posts = "All Posts";
 
-       return view('posts/index.html.twig', compact('posts'));
+        return view('posts/index.html.twig', compact('posts'));
     }
 
     public function create(): Response
@@ -20,17 +28,22 @@ class PostController extends Controller
         return view('posts/create.html.twig');
     }
 
-    public function store(): Response
+    public function store():  Response
     {
-        // Your logic here
-        return new Response('<h1>Store Post</h1>');
+        $title = $this->request->post('title');
+        $body  = $this->request->post('body');
+
+        $post = Post::create($title, $body);
+
+        $this->postMapper->save($post);
+
+        return new Response('/posts');
     }
 
     public function show(int $id): Response
     {
-        // Your logic here
-        $postId = "<h1>Show Post with ID: $id</h1>";
-        return view('posts/show.html.twig', compact('postId'));
+        $post = $this->postRepository->findById($id);
+        return view('posts/show.html.twig', compact('post'));
     }
 
     public function edit(int $id): Response
