@@ -84,6 +84,28 @@ $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($contai
 
 // end db connection for sqlite only
 
+// start console commands
+$container->add('base-commands-namespace',
+    new \League\Container\Argument\Literal\StringArgument('Careminate\\Console\\Commands\\')
+);
+
+$container->add(\Careminate\Console\Application::class)
+          ->addArgument($container);
+
+// $container->add(\Careminate\Console\Kernel::class)
+//     ->addArgument($container);
+$container->add(\Careminate\Console\Kernel::class)
+          ->addArguments([$container, \Careminate\Console\Application::class]);
+
+// $container->add(
+//                'database:migrations:migrate', \Careminate\Console\Commands\MigrateDatabase::class)
+//            ->addArgument(\Doctrine\DBAL\Connection::class);
+$migrationsPath = BASE_PATH . '/database/migrations';
+$container->add('database:migrations:migrate',\Careminate\Console\Commands\MigrateDatabase::class)
+->addArguments([\Doctrine\DBAL\Connection::class,new \League\Container\Argument\Literal\StringArgument($migrationsPath)
+]);
+
+// end console command
 // Debug output (should be removed in production)
 // dd($container);
 
