@@ -11,6 +11,6 @@ class HomeController extends Controller
     public function index(): Response
     {
         $title = "Home Page";
-        return view('home.html.twig', compact('title'));
+        return view('home', compact('title'));
     }
 }

@@ -1,7 +1,9 @@
 <?php 
 
-use Careminate\Database\Connections\Factory\ConnectionFactory;
-use Careminate\Database\Connections\Contracts\ConnectionInterface;
+use Careminate\Providers\DatabaseServiceProvider;
+use Careminate\Database\Connections\Factory\DatabaseConnectionFactory;
+use Careminate\Database\Connections\Contracts\DatabaseConnectionInterface;
+
 // Load environment variables
 $dotenv = new \Symfony\Component\Dotenv\Dotenv();
 $dotenv->load(dirname(__DIR__) . '/.env');
@@ -112,37 +114,19 @@ $container->inflector(\Careminate\Http\Controllers\AbstractController::class)
 // end twig template
 
 // start db connection for sqlite only
-// Load database config
-// $dbConfig = require $basePath . '/config/database.php';
+// ✅ Database connection binding
+$container->addShared(DatabaseConnectionInterface::class, fn() => DatabaseConnectionFactory::make());
+$container->addShared(\Doctrine\DBAL\Connection::class, fn() => DatabaseConnectionFactory::makeDBAL());
+// PDO shared instance
+$container->addShared('pdo', fn() => \Careminate\Database\Connections\Factory\DatabaseConnectionFactory::makePDO()->getPDO());
 
-// $container->add(\Careminate\Database\Connections\Factory\ConnectionFactory::class)
-//     ->addArguments([
-//         new \League\Container\Argument\Literal\ArrayArgument($dbConfig)
-//     ]);
+// Doctrine DBAL shared instance
+$container->addShared(\Doctrine\DBAL\Connection::class, fn() =>
+    \Careminate\Database\Connections\Factory\DatabaseConnectionFactory::makeDBAL()
+);
 
-// $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($container): \Doctrine\DBAL\Connection {
-//     return $container->get(\Careminate\Database\Connections\Factory\ConnectionFactory::class)->create();
-// });
+// Database
 
-
-// end db connection for sqlite only
-  # start database connection
-    $dbConfig      = require $basePath . '/config/database.php';
-    $defaultDriver = $dbConfig['default'];
-    $driverConfig  = $dbConfig['drivers'][$defaultDriver];
-
-    $container->add(ConnectionInterface::class, ConnectionFactory::class)->addArgument($driverConfig);
-    
-    # Optional – Register DB Connection globally in container
-    $container->addShared(\Doctrine\DBAL\Connection::class, function () use ($container) {
-        return $container->get(ConnectionInterface::class)->create();
-    });
-
-# test
-    $conn    = $container->get(Doctrine\DBAL\Connection::class);
-    $results = $conn->fetchAllAssociative("SELECT 1");
-    dd($results);
-# end database connection
 // start console commands
 $container->add('base-commands-namespace',
     new \League\Container\Argument\Literal\StringArgument('Careminate\\Console\\Commands\\')
