@@ -91,6 +91,7 @@ if (app_debug_mode()) {
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 }
 
+
 // ---------------------------------------------------------
 // Register global shutdown handler
 // ---------------------------------------------------------

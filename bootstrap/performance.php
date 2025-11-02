@@ -7,3 +7,4 @@ if (!function_exists('logExecutionTime')) {
         echo "<br>Request processed in " . number_format($executionTime, 4) . " seconds.";
     }
 }
+

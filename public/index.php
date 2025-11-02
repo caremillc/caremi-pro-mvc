@@ -12,6 +12,15 @@ use Careminate\Exceptions\AuthException;
 require __DIR__ . '/../bootstrap/app.php';
 $container = require BASE_PATH . '/config/container.php';
 
+$providers = [
+    \App\Providers\EventServiceProvider::class
+];
+
+foreach ($providers as $providerClass) {
+    $provider = $container->get($providerClass);
+    $provider->register();
+}
+
 // dd($container);
 try {
     // ---------------------------------------------------------
@@ -98,3 +107,4 @@ try {
 }
 
 
+//  $kernel->terminate($request, $response);
