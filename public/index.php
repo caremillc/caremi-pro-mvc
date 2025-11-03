@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 
 use Careminate\Http\Kernel;
+use Careminate\Models\Model;
 use Careminate\Routing\Router;
 use Careminate\Exceptions\Handler;
 use Careminate\Http\Requests\Request;
 use Careminate\Exceptions\AuthException;
+use Careminate\Database\Connections\Drivers\MySQLConnection;
 
 // ---------------------------------------------------------
 // Bootstrap the framework
@@ -20,6 +22,18 @@ foreach ($providers as $providerClass) {
     $provider = $container->get($providerClass);
     $provider->register();
 }
+
+// Initialize PDO
+$connection = new MySQLConnection([
+    'host' => '127.0.0.1',
+    'database' => 'dev_caremi',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8mb4',
+]);
+
+// Set connection for all models
+Model::setConnection($connection->getPDO());
 
 // dd($container);
 try {

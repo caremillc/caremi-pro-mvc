@@ -1,16 +1,37 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+// Set base path
+define('BASE_PATH', __DIR__);
 
-$commands = require __DIR__ . '/config/console.php';
+// Autoload
+require_once BASE_PATH . '/vendor/autoload.php';
 
+// Bootstrap the container
+/** @var \Psr\Container\ContainerInterface $container */
+$container = require BASE_PATH . '/config/container.php';
+
+// Get input command
 $input = $argv[1] ?? null;
 
 if (!$input) {
     echo "Usage: php caremi [command] [--options]" . PHP_EOL;
     exit(1);
 }
+
+// Get the Kernel
+$kernel = $container->get(\Careminate\Console\Kernel::class);
+
+// Let Kernel attempt to handle the command
+$status = $kernel->handle($argv);
+
+// If the Kernel returned a status other than null, exit
+if ($status !== null) {
+    exit($status);
+}
+
+// Otherwise, fallback to the legacy static command registry
+$commands = require BASE_PATH . '/config/console.php';
 
 if (!isset($commands[$input])) {
     echo "Command [$input] not found." . PHP_EOL;
@@ -25,9 +46,12 @@ if (!method_exists($command, 'handle')) {
     exit(1);
 }
 
-// Pass remaining args to handle(), skipping the command name
+// Pass remaining arguments
 $args = array_slice($argv, 2);
+$status = $command->handle($args);
 
-$command->handle($args);
+exit(is_int($status) ? $status : 0);
 
 
+
+ 

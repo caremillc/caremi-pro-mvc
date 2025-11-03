@@ -26,9 +26,10 @@
                 <tbody>
                     {% for post in posts %}
                         <tr>
+                        {# {{ dump(posts) }} #}
                             <td>{{ loop.index }}</td>
                             <td>{{ post.title }}</td>
-                            <td>{{ post.description|length > 100 ? post.description[:100] ~ '...' : post.description }}</td>
+                            <td>{{ post.body|length > 100 ? post.body[:100] ~ '...' : post.body }}</td>
                            <td>
                                {% if post.image %}
                                 <img src="{{ asset('storage/images/' ~ post.image) }}" alt="{{ post.title }}" style="width: 80px; height: auto;">

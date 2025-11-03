@@ -4,29 +4,27 @@ use Careminate\Database\Schema\Schema;
 use Careminate\Database\Blueprint\Blueprint;
 use Careminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreatePostsTable extends Migration
 {
     public function up(): void
     {
         $schema = new Schema();
-        $schema->create('users', function(Blueprint $table) {
+        $schema->create('posts', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique('email');
-            $table->string('password');
+            $table->string('title');
+            $table->string('body')->unique('body');
             $table->string('status')->default('active');
-            $table->string('role')->default('user');
             $table->timestamps();
             $table->softDeletes();
         });
-        echo "Migration up: CreateUsersTable\n";
+        echo "Migration up: CreatePostsTable\n";
     }
 
     public function down(): void
     {
         $schema = new Schema();
-        $schema->drop('users');
-        echo "Migration down: CreateUsersTable\n";
+        $schema->drop('posts');
+        echo "Migration down: CreatePostsTable\n";
     }
 
 
